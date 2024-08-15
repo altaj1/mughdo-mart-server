@@ -138,13 +138,17 @@ async function run() {
       const endPrice = parseInt(parts[1]) || 1000;
       const query = {
         currentPrice: {
-          $gte: startPrice, // $gte: greater than or equal to startPrice
-          $lte: endPrice    // $lte: less than or equal to endPrice
+          $gte: startPrice, 
+          $lte: endPrice    
         }
       };
 
-      const result = await productsCollection.find(query).skip(page * size).limit(size).toArray()
-      console.log(result.length)
+      const result = await productsCollection.find(query)
+      .sort({ data: -1 })
+      .skip(page * size)
+      .limit(size)
+      .toArray()
+      console.log(result)
       res.send("data not found")
     })
 
