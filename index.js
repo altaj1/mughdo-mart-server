@@ -56,6 +56,7 @@ async function run() {
   try {
     const db = client.db('Mughdo-Mart')
     const usersCollection = db.collection('users')
+    const productsCollection = db.collection('products')
          
     
     // verify admin middleware
@@ -101,16 +102,10 @@ async function run() {
       // check if user already exists in db
       const isExist = await usersCollection.findOne(query)
       if (isExist) {
-        if (user.status === 'Requested') {
-          // if existing user try to change his role
-          const result = await usersCollection.updateOne(query, {
-            $set: { status: user?.status },
-          })
-          return res.send(result)
-        } else {
+        
           // if existing user login again
           return res.send(isExist)
-        }
+        
       }
       // save user for the first time
       const options = { upsert: true }
@@ -124,9 +119,43 @@ async function run() {
       
       res.send(result)
     })
+    app.post('/add-product', verifyToken, async(req, res)=>{
+      const productData = req.body;
+      // console.log(productData)
+      const result = await productsCollection.insertOne(productData)
+      return res.send(result)
+    })
+    app.get('/get-all-product',async (req, res)=>{
+      
+      const productBrand = req.query.productBrand
+      const categoryName = req.query.categoryName
+      const priceRang = req.query.price
+      const searchText = req.query.searchText
+      const page = parseInt(req.query.page);
+      const size = parseInt(req.query.size);
+      const parts = priceRang.split("-");
+      const startPrice = parseInt(parts[0]) || 1;
+      const endPrice = parseInt(parts[1]) || 1000;
+      const query = {
+        currentPrice: {
+          $gte: startPrice, // $gte: greater than or equal to startPrice
+          $lte: endPrice    // $lte: less than or equal to endPrice
+        }
+      };
+
+      const result = await productsCollection.find(query).skip(page * size).limit(size).toArray()
+      console.log(result.length)
+      res.send("data not found")
+    })
+
+
+    app.get('/productCount', async (req, res) => {
+      const count = await productsCollection.countDocuments();
+      // console.log(count, "this is count")
+      res.send({ count });
+    })
   } finally {
-    // Ensures that the client will close when you finish/error
-    // await client.close();
+   
   }
 }
 run().catch(console.dir);
