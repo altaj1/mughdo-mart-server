@@ -152,7 +152,7 @@ async function run() {
       .skip(page * size)
       .limit(size)
       .toArray()
-      // console.log(result)
+      
       res.send("data not found")
     })
 
