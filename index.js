@@ -136,7 +136,11 @@ async function run() {
       const parts = priceRang.split("-");
       const startPrice = parseInt(parts[0]) || 1;
       const endPrice = parseInt(parts[1]) || 1000;
-      const query = {
+      const query = {      
+        
+        BrandName:{$regex:String(productBrand)}, 
+        category:{$regex:String(categoryName)}, 
+        name:{$regex:String(searchText), $options: 'i'},
         currentPrice: {
           $gte: startPrice, 
           $lte: endPrice    
