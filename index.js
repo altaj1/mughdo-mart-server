@@ -152,14 +152,14 @@ async function run() {
       .skip(page * size)
       .limit(size)
       .toArray()
-      console.log(result)
+      // console.log(result)
       res.send("data not found")
     })
 
 
     app.get('/productCount', async (req, res) => {
       const count = await productsCollection.countDocuments();
-      // console.log(count, "this is count")
+     
       res.send({ count });
     })
   } finally {
