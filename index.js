@@ -10,8 +10,7 @@ const corsOptions = {
     origin: [
       'http://localhost:5173', 
       'http://localhost:5174',
-      
-
+      'https://mughdomart.web.app'
     ],
     credentials: true,
     optionSuccessStatus: 200,
@@ -107,7 +106,7 @@ async function run() {
           return res.send(isExist)
         
       }
-      // save user for the first time
+  
       const options = { upsert: true }
       const updateDoc = {
         $set: {
@@ -121,7 +120,7 @@ async function run() {
     })
     app.post('/add-product', verifyToken, async(req, res)=>{
       const productData = req.body;
-      // console.log(productData)
+      
       const result = await productsCollection.insertOne(productData)
       return res.send(result)
     })
