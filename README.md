@@ -34,7 +34,7 @@ This project is a full-stack, single-page application built using the MERN (Mong
 2. **Install dependencies:**:
 npm install
 3. **Set up environment variables**:
-MONGO_URI=your_mongodb_connection_string
+   MONGO_URI=your_mongodb_connection_string
 
 4. **Start the development servers**:
 nodemon index.js
